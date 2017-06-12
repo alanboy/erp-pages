@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>omegaUp - Toolkit</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Pacifico|Rubik">
+
+      <link rel="stylesheet" href="https://omegaup.org/toolkit/css/style.css">
+
+      <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+      <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+      <script src="js/lib/jquery.hotkeys.js"></script><script src="js/lib/humanize-duration.js"></script>
+      <script src="js/notification.js"></script>
+
+      <link rel="icon" type="image/png" href="img/logo.favicon.bleed.png">
+   </head>
+   <body>
+      <div class="navbar navbar-default navbar-fixed-top">
+         <div class="container-fluid">
+            <div class="navbar-header"><a class="navbar-brand" href="#"><img class="navbar-logo" src="img/main128.png"><span class="navbar-logo">.toolkit</span></a><button class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+            <div class="navbar-collapse collapse">
+               <ul class="nav navbar-nav">
+                  <li><a href="home"><i class="glyphicon glyphicon-home"></i> Home</a></li>
+                  <li><a href="give"><i class="glyphicon glyphicon-heart"></i> Give</a></li>
+               </ul>
+               <ul class="nav navbar-nav navbar-right">
+                  <li><a href="https://github.com/rcxr/omegaup-toolkit/issues" target="_blank"><i class="glyphicon glyphicon-bullhorn"></i> Ideas?</a></li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <div class="container">
+         <div class="hidden-xs hidden-sm" id="notification-container"></div>
+         <script src="js/home.js"></script>
+         <div class="panel panel-default">
+            <div class="panel-body">
+               <div class="row" id="dashboard-other"></div>
+            </div>
+         </div>
+      </div>
+   </body>
+</html>
