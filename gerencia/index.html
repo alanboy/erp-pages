@@ -4,8 +4,11 @@
       <title>omegaUp - Toolkit</title>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-      <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Pacifico|Rubik">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico|Rubik">
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
 
       <style>
@@ -122,21 +125,20 @@ a.thumbnail {
   font-weight: bold;
 }
       </style>
-      <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
-      <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
    </head>
    <body>
       <div class="navbar navbar-default navbar-fixed-top">
          <div class="container-fluid">
-            <div class="navbar-header"><a class="navbar-brand" href="#"><img class="navbar-logo" src="img/main128.png"><span class="navbar-logo">.toolkit</span></a><button class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+            <div class="navbar-header"><a class="navbar-brand" href="#"><button class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
             <div class="navbar-collapse collapse">
                <ul class="nav navbar-nav">
                   <li><a href="home"><i class="glyphicon glyphicon-home"></i> Home</a></li>
                   <li><a href="give"><i class="glyphicon glyphicon-heart"></i> Give</a></li>
                </ul>
                <ul class="nav navbar-nav navbar-right">
+                 <!--
                   <li><a href="https://github.com/rcxr/omegaup-toolkit/issues" target="_blank"><i class="glyphicon glyphicon-bullhorn"></i> Ideas?</a></li>
+                    -->
                </ul>
             </div>
          </div>
@@ -144,6 +146,7 @@ a.thumbnail {
       <div class="container">
         <p>Bienvenido a omegaUp!</p>
          <div class="hidden-xs hidden-sm" id="notification-container"></div>
+
          <script >
 $(function() {
   var Categories = {
@@ -185,8 +188,7 @@ $(function() {
               .addClass("caption")
               .append($("<p></p>")
                 .addClass("title")
-                .text(title))
-              .append($("<kbd class='hidden-xs hidden-sm'><kbd>g</kbd>, <kbd>" + shortcut + "</kbd></kbd>"))));
+                .text(title))));
       };
 
       this.attemptTrigger = function(filter) {
@@ -200,16 +202,16 @@ $(function() {
   var thumbnails = [
     new Thumbnail(Categories.ALL, "http://drive.omegaup.com", "<i class='towhitecolor glyphicon glyphicon-folder-open'></i>", "Google Drive", "", "d"),
     new Thumbnail(Categories.ALL, "https://tracker.toptal.com/app/web-tracker", "<i class='towhitecolor glyphicon glyphicon-time'></i>", "Tiempo de Voluntariado", "", "w"),
-    new Thumbnail(Categories.ALL, "slack://omegauporg.slack.com", "<img src='img/slack_monochrome_white.png'></img>", "Slack", "", "s"),
-    new Thumbnail(Categories.DEV, "https://trello.com/omegaup", "<img src='img/trello-logo-white.png'></img>", "Trello", "", "q"),
-    new Thumbnail(Categories.DEV, "onenote:https://d.docs-df.live.net/f3cc87f1cbe7befb/Documentos/OmegaUp/", "<img class='towhitefilter' src='img/AppLockup_rgb_OneNote_Large_OneNote_88.png'></img>", "OneNote", "", "n"),
+    new Thumbnail(Categories.ALL, "slack://omegauporg.slack.com", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/slack-1.svg'></img>", "Slack", "", "s"),
+    new Thumbnail(Categories.DEV, "https://trello.com/omegaup", "<img src='https://cdn.worldvectorlogo.com/logos/trello.svg'></img>", "Trello", "", "q"),
+    new Thumbnail(Categories.DEV, "onenote:https://d.docs-df.live.net/f3cc87f1cbe7befb/Documentos/OmegaUp/", "<img class='' src='https://cdn.worldvectorlogo.com/logos/onenote-icon.svg'></img>", "OneNote", "", "n"),
     new Thumbnail(Categories.NONE, "https://drive.google.com/open?id=1MhuN-NwpsPI-ICbemvcTMmlzQuP5LQEBIzhsL6ppqxk", "<img src='img/logo.square.white.png'></img>", "omegaUp Bylaws", "", "."),
-    new Thumbnail(Categories.NONE, "https://omegaup.com", "<img src='img/logo.square.white.png'></img>", "omegaup.com", "", "o"),
-    new Thumbnail(Categories.NONE, "https://omegaup.org", "<img src='img/logo.square.white.png'></img>", "omegaup.org", "", "i"),
-    new Thumbnail(Categories.SOCIAL, "https://twitter.com/omegaUp", "<img src='img/Twitter_Logo_White_On_Image.png'></img>", "Twitter", "", "t"),
-    new Thumbnail(Categories.SOCIAL, "https://www.facebook.com/omegaup", "<img src='img/FB-f-Logo__white_1024.png'></img>", "Facebook", "", "f"),
-    new Thumbnail(Categories.SOCIAL, "https://www.linkedin.com/company-beta/16244586/", "<img src='img/Logo-White-128px-R.png'></img>", "LinkedIn", "", "l"),
-    new Thumbnail(Categories.TECH, "https://github.com/omegaup/omegaup", "<img src='img/GitHub-Mark-Light-120px-plus.png'></img>", "GitHub", "", "g"),
+    new Thumbnail(Categories.NONE, "https://omegaup.com", "<img class='towhitefilter' src='https://omegaup.com/media/omegaup_curves.png'></img>", "omegaup.com", "", "o"),
+    new Thumbnail(Categories.NONE, "https://omegaup.org", "<img class='towhitefilter' src='https://omegaup.com/media/omegaup_curves.png'></img>", "omegaup.org", "", "i"),
+    new Thumbnail(Categories.SOCIAL, "https://twitter.com/omegaUp", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/twitter.svg'></img>", "Twitter", "", "t"),
+    new Thumbnail(Categories.SOCIAL, "https://www.facebook.com/omegaup", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/facebook-1.svg'></img>", "Facebook", "", "f"),
+    new Thumbnail(Categories.SOCIAL, "https://www.linkedin.com/company-beta/16244586/", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/linkedin.svg'></img>", "LinkedIn", "", "l"),
+    new Thumbnail(Categories.TECH, "https://github.com/omegaup/omegaup", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/github-2.svg'></img>", "GitHub", "", "g"),
   ];
 
   thumbnails.forEach(function(thumbnail) { $("#dashboard-other").append(thumbnail.generate()); });
