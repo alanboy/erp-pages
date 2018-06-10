@@ -1,0 +1,142 @@
+
+<html><head><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/reset.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/message.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/site.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/container.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/grid.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/header.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/image.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/menu.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/divider.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/dropdown.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/segment.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/button.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/list.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/icon.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/sidebar.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/transition.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/form.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/button.css">
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/form.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/visibility.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/sidebar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/transition.js"></script>
+    <script src="/js/enterpos-api.js?r=0.4"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("#onboardstart").on('click', OnboardNewVolunteer);
+        });
+
+        let HtmlEmailBody = '<h2>Hola {name}! </h2>'
+                + '<p>Que gusto me da saber que estas interesado en ser un voluntario de omegaUp.'
+                + ' Te puedo pedir de favor si me ayudas respondiendo esta encuesta inicial: '
+                + ' <a href="https://goo.gl/forms/164ZYer2DXVBEcFF3">https://goo.gl/forms/164ZYer2DXVBEcFF3</a>'
+                + ' </p>'
+                + '<p>Gracias!</p>';
+
+        function WriteResult(message) {
+            $("#onboarding-result").html(message);
+        }
+
+        function WriteError(message) {
+            $("#onboarding-result").html("<div class=\"ui red message\">" + message + "</div>");
+        }
+
+        function OnboardNewVolunteer(email) {
+            WriteResult("");
+            let emailToOnboard = $("#email").val();
+            let nameToOnboard = $("#name").val();
+            let resultServiceOrderId = null;
+
+            // First, lets see if this email already exists.
+            POS.Api.GET('api/cliente/buscar', {
+                    query : emailToOnboard
+
+            }).then(function(result) {
+                if (result.numero_de_resultados != 0) {
+                    throw "This email is already registered, found " + result.numero_de_resultados + " results.";
+                }
+
+            }).then(function(){
+                // Now, let's see if this user is an employee already
+                return POS.Api.GET('api/personal/usuario/lista');
+
+            }).then(function(result){
+                // Iterate over employees, as the API does not allow to seravh by email yet
+                for (let i = 0 ; i < result.numero_de_resultados; i++) {
+                    if (result.resultados[i].correo_electronico === emailToOnboard) {
+                        throw "This email is already registered to employee, found " + (result.resultados[i].nombre) + " .";
+                    }
+                }
+
+            }).then(function(){
+                // Create this new contact
+                return POS.Api.POST('api/cliente/nuevo', {
+                        razon_social : nameToOnboard,
+                        email : emailToOnboard
+                    });
+
+
+            }).then(function(result){
+                // Now that we have the contact, create the onboarding order
+                let resultantUserId = result.id_cliente;
+                return POS.Api.POST('api/servicios/orden/nueva', {
+                        id_cliente : resultantUserId,
+                        id_servicio : 4 /* HARDCODED TO BE SERVICE ID 4 WHICH IS ONBOARDING */
+                    });
+
+            }).then(function(result){
+                resultServiceOrderId = result.id_orden;
+                // Great! Send an email to this new volunteer
+                HtmlEmailBody.replace("{name}", nameToOnboard);
+                return POS.Api.POST('api/pos/mail/enviar', {
+                        cuerpo : HtmlEmailBody,
+                        destinatario : emailToOnboard,
+                        titulo : "Hola desde omegaUp!"
+                    });
+
+            }).then(function(){
+                // Add a new follow-up to the order
+                return POS.Api.POST('api/pos/mail/enviar', {
+                        id_orden_de_servicio : resultServiceOrderId,
+                        nota : "Email introduction enviado solicitando que se llene el formulario, ver los resultados aqui: "
+                                + "https://docs.google.com/spreadsheets/d/1690irm6KhnFcFcytKD3DUDm789R-aN8kklQmwP28pPA/edit#gid=2117977917"
+                    });
+
+            }).then(function(result){
+                WriteResult("Ok!")
+
+            }).catch(function(e){
+                console.error(e);
+                WriteError(e.error || e);
+
+            });
+        }
+
+    </script>
+</head><body>
+    <div class="ui text container">
+      <h3 class="ui header">Onboarding of volunteers</h3>
+      <p>Type the name and email of the volunteer you want to onboard</p>
+        <div class="ui form">
+          <div class="inline fields">
+            <div class="field">
+              <input type="text" id="name" placeholder="name" value="John doe">
+            </div>
+            <div class="field">
+              <input type="text" id="email" placeholder="Email" value="alan.gohe@gmail.com">
+            </div>
+            <div class="five wide field">
+              <a id="onboardstart" class="ui blue button">Onboard</a>
+            </div>
+          </div>
+        </div>
+        <p id="onboarding-result"></p>
+    </div>
+
+
+</body></html>
