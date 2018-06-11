@@ -122,7 +122,7 @@
 
             }).then(function(){
                 // Add a new follow-up to the order
-                return POS.Api.POST('api/pos/mail/enviar', {
+                return POS.Api.POST('api/servicios/orden/seguimiento', {
                         id_orden_de_servicio : resultServiceOrderId,
                         nota : "Email introduction enviado solicitando que se llene el formulario, ver los resultados aqui: "
                                 + "https://docs.google.com/spreadsheets/d/1690irm6KhnFcFcytKD3DUDm789R-aN8kklQmwP28pPA/edit#gid=2117977917"
