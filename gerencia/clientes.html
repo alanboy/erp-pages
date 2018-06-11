@@ -1,5 +1,6 @@
-
-<html><head><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/reset.css">
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/reset.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/message.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/site.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/container.css">
@@ -80,7 +81,6 @@
                         email : emailToOnboard
                     });
 
-
             }).then(function(result){
                 // Now that we have the contact, create the onboarding order
                 let resultantUserId = result.id_cliente;
@@ -116,9 +116,9 @@
 
             });
         }
-
     </script>
-</head><body>
+</head>
+<body>
     <div class="ui text container">
       <h3 class="ui header">Onboarding of volunteers</h3>
       <p>Type the name and email of the volunteer you want to onboard</p>
@@ -137,6 +137,4 @@
         </div>
         <p id="onboarding-result"></p>
     </div>
-
-
 </body></html>

@@ -9,7 +9,6 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
-
       <style>
 body {
 }
@@ -121,32 +120,19 @@ a.thumbnail {
       </style>
    </head>
    <body>
-<iframe width="800" height="600" src="https://app.powerbi.com/view?r=eyJrIjoiYzY3YTM0MWItZTI4NC00MTRmLWIxZWEtOTk3MjIyZjZiMjBkIiwidCI6Ijk3OWViNThmLTU1NmUtNDIyMS1hNDQ0LWE4MjAwZTdkNWVlNiIsImMiOjF9" frameborder="0" allowFullScreen="true"></iframe>
       <div class="container">
          <div class="hidden-xs hidden-sm" id="notification-container"></div>
 
          <script >
 $(function() {
-  var Categories = {
-    NONE: 0,
-    TECH: 1,
-    DEV: 2,
-    SOCIAL: 4,
-    ALL: 7
-  };
-
   var triggerIndividualUntil = 0;
   var triggerGlobalUntil = 0;
 
-  function Thumbnail(category, url, thumbnail, title, description, shortcut) {
+  function Thumbnail(url, thumbnail, title, description) {
       var trigger = function() {
         if (!window.open(url, "_blank")) {
           //alert("Allow popups for the website.");
         }
-      };
-
-      this.filter = function(filter) {
-        return filter & category;
       };
 
       this.generate = function() {
@@ -168,28 +154,22 @@ $(function() {
                 .addClass("title")
                 .text(title))));
       };
-
-      this.attemptTrigger = function(filter) {
-        if (filter & category) {
-          trigger();
-        }
-      };
-
   };
 
   var thumbnails = [
-    new Thumbnail(Categories.ALL, "http://drive.omegaup.com", "<i class='towhitecolor glyphicon glyphicon-folder-open'></i>", "Google Drive", "", "d"),
-    new Thumbnail(Categories.ALL, "https://tracker.toptal.com/app/web-tracker", "<i class='towhitecolor glyphicon glyphicon-time'></i>", "Tiempo de Voluntariado", "", "w"),
-    new Thumbnail(Categories.ALL, "slack://omegauporg.slack.com", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/slack-1.svg'></img>", "Slack", "", "s"),
-    new Thumbnail(Categories.DEV, "https://trello.com/omegaup", "<img src='https://cdn.worldvectorlogo.com/logos/trello.svg'></img>", "Trello", "", "q"),
-    new Thumbnail(Categories.DEV, "onenote:https://d.docs-df.live.net/f3cc87f1cbe7befb/Documentos/OmegaUp/", "<img class='' src='https://cdn.worldvectorlogo.com/logos/onenote-icon.svg'></img>", "OneNote", "", "n"),
-    new Thumbnail(Categories.NONE, "https://drive.google.com/open?id=1MhuN-NwpsPI-ICbemvcTMmlzQuP5LQEBIzhsL6ppqxk", "<img src='img/logo.square.white.png'></img>", "omegaUp Bylaws", "", "."),
-    new Thumbnail(Categories.NONE, "https://omegaup.com", "<img class='towhitefilter' src='https://omegaup.com/media/omegaup_curves.png'></img>", "omegaup.com", "", "o"),
-    new Thumbnail(Categories.NONE, "https://omegaup.org", "<img class='towhitefilter' src='https://omegaup.com/media/omegaup_curves.png'></img>", "omegaup.org", "", "i"),
-    new Thumbnail(Categories.SOCIAL, "https://twitter.com/omegaUp", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/twitter.svg'></img>", "Twitter", "", "t"),
-    new Thumbnail(Categories.SOCIAL, "https://www.facebook.com/omegaup", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/facebook-1.svg'></img>", "Facebook", "", "f"),
-    new Thumbnail(Categories.SOCIAL, "https://www.linkedin.com/company-beta/16244586/", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/linkedin.svg'></img>", "LinkedIn", "", "l"),
-    new Thumbnail(Categories.TECH, "https://github.com/omegaup/omegaup", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/github-2.svg'></img>", "GitHub", "", "g"),
+    new Thumbnail("http://drive.omegaup.com", "<i class='towhitecolor glyphicon glyphicon-folder-open'></i>", "Google Drive", ""),
+    new Thumbnail("http://wiki.omegaup.com", "<i class='towhitecolor glyphicon glyphicon-folder-open'></i>", "Wiki", ""),
+    new Thumbnail("https://tracker.toptal.com/app/web-tracker", "<i class='towhitecolor glyphicon glyphicon-time'></i>", "Tiempo de Voluntariado", ""),
+    new Thumbnail("slack://omegauporg.slack.com", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/slack-1.svg'></img>", "Slack", ""),
+    new Thumbnail("https://trello.com/omegaup", "<img src='https://cdn.worldvectorlogo.com/logos/trello.svg'></img>", "Trello", ""),
+    new Thumbnail("onenote:https://d.docs-df.live.net/f3cc87f1cbe7befb/Documentos/OmegaUp/", "<img class='' src='https://cdn.worldvectorlogo.com/logos/onenote-icon.svg'></img>", "OneNote", ""),
+    new Thumbnail("https://drive.google.com/open?id=1MhuN-NwpsPI-ICbemvcTMmlzQuP5LQEBIzhsL6ppqxk", "<img src='img/logo.square.white.png'></img>", "omegaUp Bylaws", ""),
+    new Thumbnail("https://omegaup.com", "<img class='towhitefilter' src='https://omegaup.com/media/omegaup_curves.png'></img>", "omegaup.com", ""),
+    new Thumbnail("https://omegaup.org", "<img class='towhitefilter' src='https://omegaup.com/media/omegaup_curves.png'></img>", "omegaup.org", ""),
+    new Thumbnail("https://twitter.com/omegaUp", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/twitter.svg'></img>", "Twitter", ""),
+    new Thumbnail("https://www.facebook.com/omegaup", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/facebook-1.svg'></img>", "Facebook", ""),
+    new Thumbnail("https://www.linkedin.com/company-beta/16244586/", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/linkedin.svg'></img>", "LinkedIn", ""),
+    new Thumbnail("https://github.com/omegaup/omegaup", "<img class='towhitefilter' src='https://cdn.worldvectorlogo.com/logos/github-2.svg'></img>", "GitHub", ""),
   ];
 
   thumbnails.forEach(function(thumbnail) { $("#dashboard-other").append(thumbnail.generate()); });
@@ -199,6 +179,7 @@ $(function() {
 
          <div class="panel panel-default">
             <div class="panel-body">
+                <h1>Welcome to omegaUp!</h1>
                <div class="row" id="dashboard-other"></div>
             </div>
          </div>
