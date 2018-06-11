@@ -30,6 +30,7 @@
     <script>
         $(document).ready(function() {
             $("#onboardstart").on('click', OnboardNewVolunteer);
+            $("#onboardstartforce").on('click', OnboardNewVolunteerForce);
         });
 
         let HtmlEmailBody = '<h2>Hola {name}! </h2>'
@@ -39,6 +40,8 @@
                 + ' </p>'
                 + '<p>Gracias!</p>';
 
+        let ForceOperation = false;
+
         function WriteResult(message) {
             $("#onboarding-result").html(message);
         }
@@ -47,11 +50,18 @@
             $("#onboarding-result").html("<div class=\"ui red message\">" + message + "</div>");
         }
 
-        function OnboardNewVolunteer(email) {
+
+        function OnboardNewVolunteerForce() {
+            ForceOperation = true;
+            OnboardNewVolunteer();
+        }
+
+        function OnboardNewVolunteer() {
             WriteResult("");
             let emailToOnboard = $("#email").val();
             let nameToOnboard = $("#name").val();
             let resultServiceOrderId = null;
+            let userIdToOnboard = null;
 
             // First, lets see if this email already exists.
             POS.Api.GET('api/cliente/buscar', {
@@ -59,7 +69,9 @@
 
             }).then(function(result) {
                 if (result.numero_de_resultados != 0) {
-                    throw "This email is already registered, found " + result.numero_de_resultados + " results.";
+                    if (!ForceOperation)
+                        throw "This email is already registered, found " + result.numero_de_resultados + " results.";
+                    userIdToOnboard = result.resultados[0].user_id;
                 }
 
             }).then(function(){
@@ -70,7 +82,9 @@
                 // Iterate over employees, as the API does not allow to seravh by email yet
                 for (let i = 0 ; i < result.numero_de_resultados; i++) {
                     if (result.resultados[i].correo_electronico === emailToOnboard) {
-                        throw "This email is already registered to employee, found " + (result.resultados[i].nombre) + " .";
+                        if (!ForceOperation)
+                            throw "This email is already registered to employee, found " + (result.resultados[i].nombre) + " .";
+                        userIdToOnboard = result.resultados[0].user_id;
                     }
                 }
 
@@ -79,13 +93,19 @@
                 return POS.Api.POST('api/cliente/nuevo', {
                         razon_social : nameToOnboard,
                         email : emailToOnboard
+                    }).then(function(a) {
+                        console.log("then", a);
+                        userIdToOnboard = result.id_cliente;
+
+                    }).catch(function (e) {
+                        if (!ForceOperation)
+                            throw e;
                     });
 
             }).then(function(result){
                 // Now that we have the contact, create the onboarding order
-                let resultantUserId = result.id_cliente;
                 return POS.Api.POST('api/servicios/orden/nueva', {
-                        id_cliente : resultantUserId,
+                        id_cliente : userIdToOnboard,
                         id_servicio : 4 /* HARDCODED TO BE SERVICE ID 4 WHICH IS ONBOARDING */
                     });
 
@@ -130,8 +150,9 @@
             <div class="field">
               <input type="text" id="email" placeholder="Email" value="alan.gohe@gmail.com">
             </div>
-            <div class="five wide field">
+            <div class="field">
               <a id="onboardstart" class="ui blue button">Onboard</a>
+              <a id="onboardstart" class="ui button">Onboard -force</a>
             </div>
           </div>
         </div>
