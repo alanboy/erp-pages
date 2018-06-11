@@ -113,7 +113,7 @@
             }).then(function(result){
                 resultServiceOrderId = result.id_orden;
                 // Great! Send an email to this new volunteer
-                HtmlEmailBody.replace("{name}", nameToOnboard);
+                HtmlEmailBody = HtmlEmailBody.replace("{name}", nameToOnboard);
                 return POS.Api.POST('api/pos/mail/enviar', {
                         cuerpo : HtmlEmailBody,
                         destinatario : emailToOnboard,
