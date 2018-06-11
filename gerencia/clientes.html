@@ -70,7 +70,7 @@
                 if (result.numero_de_resultados != 0) {
                     if (!ForceOperation)
                         throw "This email is already registered, found " + result.numero_de_resultados + " results.";
-                    userIdToOnboard = result.resultados[0].user_id;
+                    userIdToOnboard = result.resultados[0].id_usuario;
                     console.log("force: client to onboard" + userIdToOnboard);
                 }
 
@@ -84,7 +84,7 @@
                     if (result.resultados[i].correo_electronico === emailToOnboard) {
                         if (!ForceOperation)
                             throw "This email is already registered to employee, found " + (result.resultados[i].nombre) + " .";
-                        userIdToOnboard = result.resultados[0].user_id;
+                        userIdToOnboard = result.resultados[0].id_usuario;
                         console.log("force: employee to onboard" + userIdToOnboard);
                     }
                 }
