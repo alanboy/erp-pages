@@ -50,7 +50,6 @@
             $("#onboarding-result").html("<div class=\"ui red message\">" + message + "</div>");
         }
 
-
         function OnboardNewVolunteerForce() {
             ForceOperation = true;
             OnboardNewVolunteer();
@@ -72,6 +71,7 @@
                     if (!ForceOperation)
                         throw "This email is already registered, found " + result.numero_de_resultados + " results.";
                     userIdToOnboard = result.resultados[0].user_id;
+                    console.log("force: client to onboard" + userIdToOnboard);
                 }
 
             }).then(function(){
@@ -85,6 +85,7 @@
                         if (!ForceOperation)
                             throw "This email is already registered to employee, found " + (result.resultados[i].nombre) + " .";
                         userIdToOnboard = result.resultados[0].user_id;
+                        console.log("force: employee to onboard" + userIdToOnboard);
                     }
                 }
 
@@ -93,8 +94,8 @@
                 return POS.Api.POST('api/cliente/nuevo', {
                         razon_social : nameToOnboard,
                         email : emailToOnboard
-                    }).then(function(a) {
-                        console.log("then", a);
+                    }).then(function(result) {
+                        console.log("new client created", result);
                         userIdToOnboard = result.id_cliente;
 
                     }).catch(function (e) {
@@ -129,10 +130,12 @@
 
             }).then(function(result){
                 WriteResult("Ok!")
+                ForceOperation = false;
 
             }).catch(function(e){
                 console.error(e);
                 WriteError(e.error || e);
+                ForceOperation = false;
 
             });
         }
